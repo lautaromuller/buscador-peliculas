@@ -55,6 +55,7 @@ function displayMovies(movies) {
         //Creando y agregando hijos secundarios
         voteAverage = document.createElement('p')   //Votos del publico
         voteAverage.textContent = movie.vote_average.toString().substr(0, 3)
+        voteAverage.classList.add('vote')
 
         overview = document.createElement('p')  //Descripción
         overview.textContent = movie.overview   
@@ -74,12 +75,15 @@ function efectoPeliculas() {
     let arrayImagenes = document.querySelectorAll('.fff')  //Array de imagenes de peliculas
 
     arrayPeliculas.forEach(pelicula => {
-        let imagen = arrayImagenes[indice]  //Imagen de la pelicula con focus
+        let imagen = arrayImagenes[indice]  //Imagen de la pelicula apuntada
         indice++
         pelicula.addEventListener('mouseover', () => {
             imagen.setAttribute('hidden',true)
+            if(voteAverage> 0){
+
+                pelicula.appendChild(voteAverage)
+            }
             pelicula.appendChild(overview)
-            pelicula.appendChild(voteAverage)
         })
         pelicula.addEventListener('mouseout', () => {
             imagen.removeAttribute('hidden')
@@ -88,3 +92,10 @@ function efectoPeliculas() {
         })
     })
 }
+
+const input = document.getElementById('searchInput')
+input.addEventListener('change', () => {
+    if(input.value.length > 0){
+        input.style.color = "#fff"
+    }
+})
