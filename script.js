@@ -5,13 +5,22 @@ let apiKey = '587e1b1d60229730080c6a05bbf20c2a';
 let url = 'https://api.themoviedb.org/3/search/movie'
 let urlImg = 'https://image.tmdb.org/t/p/w200'
 
+//Color del input
+const input = document.getElementById('searchInput')
+input.addEventListener('change', () => {
+    if (input.value.length > 0) {
+        input.style.color = "#fff"
+    }
+})
+
+input.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter'){
+        searchMovies()
+    }
+})
+
 //Contenedor peliculas
 let resultContainer = document.getElementById('results')
-
-//Datos que aparecen despues
-let voteAverage
-let overview
-let poster
 
 //Buscar peliculas
 function searchMovies() {
@@ -44,58 +53,60 @@ function displayMovies(movies) {
 
         let posterPath = urlImg + movie.poster_path   //URL del poster
 
-        poster = document.createElement('img')  //Imagen de la pelicula
+        let poster = document.createElement('img')  //Imagen
         poster.src = posterPath
-        poster.classList.add('fff')
+        poster.classList.add('poster')
 
-        //Agregando hijos iniciales
-        movieDiv.appendChild(poster)
-        movieDiv.appendChild(title)
-
-        //Creando y agregando hijos secundarios
-        voteAverage = document.createElement('p')   //Votos del publico
+        let voteAverage = document.createElement('p')   //Votos del publico
         voteAverage.textContent = movie.vote_average.toString().substr(0, 3)
         voteAverage.classList.add('vote')
+        voteAverage.style.display = 'none';
 
-        overview = document.createElement('p')  //Descripción
-        overview.textContent = movie.overview   
-        overview.classList.add('overview')
+        let overview = document.createElement('p');
+        overview.textContent = movie.overview;
+        overview.classList.add('overview');
+        overview.style.display = 'none';
 
-        resultContainer.appendChild(movieDiv)
+        movieDiv.appendChild(poster);
+        movieDiv.appendChild(title);
+        movieDiv.appendChild(overview); 
+        movieDiv.appendChild(voteAverage)
+
+        resultContainer.appendChild(movieDiv);
     });
 
-    efectoPeliculas()
+    efectoPeliculas();
 }
-
 
 //Efecto de las peliculas
 function efectoPeliculas() {
-    let arrayPeliculas = document.querySelectorAll('.movie')
-    let indice = 0;
-    let arrayImagenes = document.querySelectorAll('.fff')  //Array de imagenes de peliculas
+    let arrayPeliculas = document.querySelectorAll('.movie');
 
     arrayPeliculas.forEach(pelicula => {
-        let imagen = arrayImagenes[indice]  //Imagen de la pelicula apuntada
-        indice++
-        pelicula.addEventListener('mouseover', () => {
-            imagen.setAttribute('hidden',true)
-            if(voteAverage> 0){
+        let imagen = pelicula.querySelector('.poster');
+        let description = pelicula.querySelector('.overview');
+        let votes = pelicula.querySelector('.vote')
+        let title = pelicula.querySelector('h2')
 
-                pelicula.appendChild(voteAverage)
+        pelicula.addEventListener('mouseover', () => {
+            imagen.setAttribute('hidden', true);
+            description.style.display = '-webkit-box';
+            title.style.top = '10px'
+            if(votes.innerHTML != '0'){
+                votes.style.display = 'block'
             }
-            pelicula.appendChild(overview)
-        })
+        });
+
         pelicula.addEventListener('mouseout', () => {
-            imagen.removeAttribute('hidden')
-            pelicula.removeChild(overview)
-            pelicula.removeChild(voteAverage)
-        })
-    })
+            imagen.removeAttribute('hidden');
+            description.style.display = 'none';
+            title.style.top = 'auto'
+            title.style.bottom = '0'
+            if(votes.style.display == 'block'){
+                votes.style.display = 'none'
+            }
+        });
+    });
 }
 
-const input = document.getElementById('searchInput')
-input.addEventListener('change', () => {
-    if(input.value.length > 0){
-        input.style.color = "#fff"
-    }
-})
+
