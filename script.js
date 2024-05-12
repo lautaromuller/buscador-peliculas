@@ -67,6 +67,13 @@ function displayMovies(movies) {
         overview.classList.add('overview');
         overview.style.display = 'none';
 
+
+        movieDiv.classList.add('m')
+        title.classList.add('m')
+        poster.classList.add('m')
+        voteAverage.classList.add('m')
+        overview.classList.add('m')
+
         movieDiv.appendChild(poster);
         movieDiv.appendChild(title);
         movieDiv.appendChild(overview); 
